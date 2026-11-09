@@ -14,6 +14,8 @@ export default function Landing() {
   const ids = ['servicos', 'projetos', 'sobre', 'faq']
   return (
     <div id="top">
+      <div className="edge top" aria-hidden="true"><i /><i /><i /><i /></div>
+      <div className="edge bottom" aria-hidden="true"><i /><i /><i /><i /></div>
       <header><div className="pill">
         <a href="#top" onClick={(e) => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }) }}><img src={b.logo} alt="GPRETO" className="logo" /></a>
         <nav>{c.nav.map((n, i) => <a key={i} href={'#' + ids[i]} onClick={go(ids[i])}>{n}</a>)}</nav>

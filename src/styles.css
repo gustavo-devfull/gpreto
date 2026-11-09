@@ -69,3 +69,12 @@ h2{margin:0;font-weight:500;font-size:clamp(34px,4.4vw,56px);letter-spacing:-.04
 .lang{display:flex;background:#f3f2ee;border-radius:999px;padding:3px}
 .lang button{all:unset;cursor:pointer;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:600;color:#55534c;letter-spacing:.04em}
 .lang button.on{background:#fff;color:#151513;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+/* desfoque progressivo no topo e na base da janela */
+.edge{position:fixed;left:0;right:0;height:clamp(64px,11vh,120px);z-index:5;pointer-events:none}
+.edge.top{top:0}.edge.bottom{bottom:0}
+.edge i{position:absolute;inset:0}
+.edge.top i{--d:to bottom}.edge.bottom i{--d:to top}
+.edge i:nth-child(1){-webkit-backdrop-filter:blur(.5px);backdrop-filter:blur(.5px);mask:linear-gradient(var(--d),#000 0,#000 25%,transparent 50%);-webkit-mask:linear-gradient(var(--d),#000 0,#000 25%,transparent 50%)}
+.edge i:nth-child(2){-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px);mask:linear-gradient(var(--d),#000 0,#000 18%,transparent 40%);-webkit-mask:linear-gradient(var(--d),#000 0,#000 18%,transparent 40%)}
+.edge i:nth-child(3){-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);mask:linear-gradient(var(--d),#000 0,#000 10%,transparent 30%);-webkit-mask:linear-gradient(var(--d),#000 0,#000 10%,transparent 30%)}
+.edge i:nth-child(4){-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);mask:linear-gradient(var(--d),#000 0,transparent 18%);-webkit-mask:linear-gradient(var(--d),#000 0,transparent 18%)}
