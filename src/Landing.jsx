@@ -31,7 +31,11 @@ export default function Landing() {
         <div className="row"><a className="btn" href={b.whatsapp}>{hero.cta1}</a><a className="btn light" href="#projetos" onClick={go('projetos')}>{hero.cta2}</a></div>
       </section>
 
-      <div className="strip">{projects.items.slice(0, 4).map((p, i) => <Reveal key={i} delay={i * 80}><img src={p.image} alt={p.name} /></Reveal>)}</div>
+      <div className="marquee" aria-label={projects.title}>
+        <div className="track">{[...projects.items, ...projects.items].map((p, i) => (
+          <div className="slide" key={i} aria-hidden={i >= projects.items.length}><img src={p.image} alt={i < projects.items.length ? p.name : ''} loading="lazy" /></div>
+        ))}</div>
+      </div>
 
       <section className="hello">
         <span className="serif" style={{ fontSize: 24, color: '#55534c' }}>{hello.greeting}</span>
