@@ -1,17 +1,23 @@
-import { useState, useRef } from 'react'
-import { useAllContent, setContent, resetContent, ADMIN_PW_KEY } from '../store'
+import { useState, useRef, useEffect } from 'react'
+import { useAllContent, setContent, refreshContent, defaultContents } from '../store'
+import { supabase, BUCKET } from '../supabase'
 import './admin.css'
 
-const getPw = () => localStorage.getItem(ADMIN_PW_KEY) || 'admin123'
 const clone = (o) => JSON.parse(JSON.stringify(o))
 
-// reduz imagens enviadas para caber no localStorage
-const fileToDataUrl = (file) => new Promise((res) => {
+// reduz a imagem e envia ao Supabase Storage, devolvendo a URL pública
+const uploadImage = (file) => new Promise((resolve, reject) => {
   const img = new Image(), fr = new FileReader()
   fr.onload = () => { img.onload = () => {
-    const m = Math.min(1, 1400 / img.width), cv = document.createElement('canvas')
+    const m = Math.min(1, 1600 / img.width), cv = document.createElement('canvas')
     cv.width = img.width * m; cv.height = img.height * m
-    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res(cv.toDataURL('image/jpeg', 0.82))
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height)
+    cv.toBlob(async (blob) => {
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`
+      const { error } = await supabase.storage.from(BUCKET).upload(path, blob, { contentType: 'image/webp', cacheControl: '31536000' })
+      if (error) return reject(error)
+      resolve(supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl)
+    }, 'image/webp', 0.85)
   }; img.src = fr.result }
   fr.readAsDataURL(file)
 })
@@ -22,15 +28,23 @@ const Field = ({ label, value, onChange, area, rows = 3 }) => (
       : <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} />}
   </label>)
 
-const ImageField = ({ label, value, onChange }) => (
-  <div className="f"><span>{label}</span>
+const ImageField = ({ label, value, onChange }) => {
+  const [busy, setBusy] = useState(false)
+  return (<div className="f"><span>{label}</span>
     <div className="img">
       {value && <img src={value} alt="" />}
       <div style={{ flex: 1, display: 'grid', gap: 6 }}>
-        <input placeholder="URL da imagem" value={value?.startsWith('data:') ? '(imagem enviada)' : value ?? ''} onChange={(e) => onChange(e.target.value)} readOnly={value?.startsWith('data:')} />
-        <input type="file" accept="image/*" onChange={async (e) => e.target.files[0] && onChange(await fileToDataUrl(e.target.files[0]))} />
+        <input placeholder="URL da imagem" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+        <input type="file" accept="image/*" disabled={busy} onChange={async (e) => {
+          const f = e.target.files[0]; if (!f) return
+          setBusy(true)
+          try { onChange(await uploadImage(f)) } catch (err) { alert('Falha no envio: ' + (err.message || err)) }
+          setBusy(false)
+        }} />
+        {busy && <small>Enviando…</small>}
       </div>
     </div></div>)
+}
 
 const Check = ({ label, value, onChange }) => <label className="chk"><input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} />{label}</label>
 
@@ -55,27 +69,49 @@ function ObjList({ items, onChange, blank, title, render }) {
     <button className="add" onClick={() => onChange([...items, clone(blank)])}>+ Adicionar item</button></div>)
 }
 
-function Login({ onOk }) {
-  const [v, setV] = useState(''), [err, setErr] = useState(false)
-  return (<div className="login"><form onSubmit={(e) => { e.preventDefault(); if (v === getPw()) { sessionStorage.setItem('gp_admin', '1'); onOk() } else setErr(true) }}>
-    <h1>Admin GPRETO</h1><input type="password" autoFocus placeholder="Senha" value={v} onChange={(e) => { setV(e.target.value); setErr(false) }} />
-    {err && <small className="err">Senha incorreta</small>}<button className="pri">Entrar</button>
+function Login() {
+  const [email, setEmail] = useState(''), [pw, setPw] = useState(''), [err, setErr] = useState(''), [info, setInfo] = useState(''), [busy, setBusy] = useState(false)
+  const run = async (mode) => {
+    setBusy(true); setErr(''); setInfo('')
+    const { error, data } = mode === 'in' ? await supabase.auth.signInWithPassword({ email, password: pw }) : await supabase.auth.signUp({ email, password: pw })
+    setBusy(false)
+    if (error) setErr(error.message)
+    else if (mode === 'up' && !data.session) setInfo('Conta criada. Confirme o e-mail recebido e depois entre.')
+  }
+  return (<div className="login"><form onSubmit={(e) => { e.preventDefault(); run('in') }}>
+    <h1>Admin GPRETO</h1>
+    <input type="email" autoFocus placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+    <input type="password" placeholder="Senha" value={pw} onChange={(e) => setPw(e.target.value)} />
+    {err && <small className="err">{err}</small>}{info && <small>{info}</small>}
+    <button className="pri" disabled={busy}>Entrar</button>
+    <button type="button" disabled={busy || !email || pw.length < 6} onClick={() => run('up')}>Criar conta (primeiro acesso)</button>
     <a href="#/">← Voltar ao site</a></form></div>)
 }
 
 export default function Admin() {
   const all = useAllContent()
   const [lang, setLangTab] = useState('pt')
-  const [auth, setAuth] = useState(!!sessionStorage.getItem('gp_admin'))
+  const [session, setSession] = useState(undefined)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
+    return () => data.subscription.unsubscribe()
+  }, [])
   const [tab, setTab] = useState('hero')
   const [draft, setDraft] = useState(null)
   const [saved, setSaved] = useState(false)
   const fileRef = useRef()
-  if (!auth) return <Login onOk={() => setAuth(true)} />
+  if (session === undefined) return <div className="login">Carregando…</div>
+  if (!session) return <Login />
+  const email = session.user.email
   const d = (draft || all)[lang]
   const dirty = !!draft
   const up = (section, patch) => setDraft({ ...(draft || all), [lang]: { ...d, [section]: Array.isArray(d[section]) ? patch : { ...d[section], ...patch } } })
-  const save = () => { setContent(draft); setDraft(null); setSaved(true); setTimeout(() => setSaved(false), 2000) }
+  const save = async () => {
+    const err = await setContent(draft)
+    if (err) return alert('Não foi possível salvar: ' + err + '\n(Verifique se você entrou com a conta de administrador.)')
+    setDraft(null); setSaved(true); setTimeout(() => setSaved(false), 2000)
+  }
   const exp = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(draft || all, null, 2)], { type: 'application/json' })); a.download = 'gpreto-conteudo.json'; a.click() }
   const imp = (f) => { const r = new FileReader(); r.onload = () => { try { { const j = JSON.parse(r.result); setDraft(j.hero ? { pt: j, en: all.en } : j) } } catch { alert('JSON inválido') } }; r.readAsText(f) }
   const tabs = { hero: 'Hero', hello: 'Apresentação', services: 'Serviços', projects: 'Projetos', about: 'Sobre', faq: 'FAQ', contact: 'Contato', brand: 'Marca & links', settings: 'Backup & senha' }
@@ -143,13 +179,13 @@ export default function Admin() {
       <Field label="Cidade (rodapé)" value={d.brand.city} onChange={(v) => up('brand', { city: v })} />
       <Field label="Texto de copyright" value={d.brand.footer} onChange={(v) => up('brand', { footer: v })} /></>,
     settings: <>
-      <p className="hint">O conteúdo é salvo no navegador deste computador (localStorage). Use o backup para levar o conteúdo para outro dispositivo.</p>
+      <p className="hint">O conteúdo é salvo no Supabase e aparece para todos os visitantes. O backup em JSON é opcional.</p>
       <div className="row"><button className="pri" onClick={exp}>Exportar JSON</button>
         <button onClick={() => fileRef.current.click()}>Importar JSON</button>
         <input ref={fileRef} type="file" accept=".json" hidden onChange={(e) => e.target.files[0] && imp(e.target.files[0])} />
-        <button className="danger" onClick={() => confirm('Restaurar todo o conteúdo original?') && (resetContent(), setDraft(null))}>Restaurar padrão</button></div>
+        <button className="danger" onClick={() => confirm('Carregar o conteúdo original no editor? (só vale depois de salvar)') && setDraft(defaultContents())}>Carregar conteúdo original</button></div>
       <h4>Alterar senha do admin</h4>
-      <form onSubmit={(e) => { e.preventDefault(); const v = e.target.pw.value.trim(); if (v.length < 4) return alert('Mínimo 4 caracteres'); localStorage.setItem(ADMIN_PW_KEY, v); e.target.reset(); alert('Senha alterada') }}>
+      <form onSubmit={async (e) => { e.preventDefault(); const v = e.target.pw.value; if (v.length < 6) return alert('Mínimo 6 caracteres'); const { error } = await supabase.auth.updateUser({ password: v }); alert(error ? error.message : 'Senha alterada'); e.target.reset() }}>
         <div className="li"><input name="pw" type="password" placeholder="Nova senha" /><button className="pri">Salvar senha</button></div></form></>,
   }
 
@@ -157,7 +193,7 @@ export default function Admin() {
     <aside><b>GPRETO · Admin</b>
       {Object.entries(tabs).map(([k, v]) => <button key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       <a href="#/" target="_blank">Ver site ↗</a>
-      <button onClick={() => { sessionStorage.removeItem('gp_admin'); setAuth(false) }}>Sair</button></aside>
+      <button onClick={() => supabase.auth.signOut()}>Sair ({email})</button></aside>
     <main><div className="bar"><h2>{tabs[tab]}</h2><div className="langtab">{['pt', 'en'].map((x) => <button key={x} className={lang === x ? 'on' : ''} onClick={() => setLangTab(x)}>{x === 'pt' ? '🇧🇷 Português' : '🇺🇸 English'}</button>)}</div>
       <span>{saved && <em>✓ Salvo</em>}{dirty && <button onClick={() => setDraft(null)}>Descartar</button>}
         <button className="pri" disabled={!dirty} onClick={save}>Salvar alterações</button></span></div>
