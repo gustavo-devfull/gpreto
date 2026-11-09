@@ -1,10 +1,10 @@
 const W = 'https://wa.me/5516997520110'
 const P = (name, cat, image, link) => ({ name, cat, image, link })
-export const defaultContent = {
+export const defaultContentPt = {
   brand: {
     logo: './img/logo-gpreto.png', whatsapp: W, phone: '+55 16 99752-0110',
     instagram: 'https://instagram.com/gpreto.site', linkedin: 'https://www.linkedin.com/in/gutosantos/',
-    github: 'https://github.com/gustavo-devfull', city: 'Araraquara — SP', footer: '© 2026 GPRETO | Soluções Digitais',
+    github: 'https://github.com/gustavo-devfull', city: 'Araraquara — SP', footer: '© 2026 GPRETO | Soluções Digitais', navCta: 'Contato', backToTop: 'Voltar ao topo ↑',
   },
   nav: ['Serviços', 'Projetos', 'Sobre', 'FAQ'],
   hero: {
@@ -13,6 +13,7 @@ export const defaultContent = {
     cta1: 'Solicitar orçamento', cta2: 'Ver projetos', animation3d: true,
   },
   hello: {
+    greeting: 'Olá!',
     text: 'Transformamos suas ideias em realidade digital — com design bonito, funcional e feito para atrair e reter clientes.',
     tags: ['Landing pages', 'Sites institucionais', 'E-commerce', 'Design responsivo', 'SEO', 'Suporte técnico'],
   },

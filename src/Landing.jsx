@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useContent } from './store'
+import { useContent, useLang, setLang } from './store'
 import Hero3D from './components/Hero3D'
 import Reveal from './components/Reveal'
 
@@ -8,6 +8,7 @@ const url = (l) => (/^https?:\/\//.test(l) ? l : 'https://' + l)
 
 export default function Landing() {
   const c = useContent()
+  const lang = useLang()
   const [open, setOpen] = useState(0)
   const { brand: b, hero, hello, services, projects, about, faq, contact } = c
   const ids = ['servicos', 'projetos', 'sobre', 'faq']
@@ -16,7 +17,8 @@ export default function Landing() {
       <header><div className="pill">
         <a href="#top" onClick={(e) => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }) }}><img src={b.logo} alt="GPRETO" className="logo" /></a>
         <nav>{c.nav.map((n, i) => <a key={i} href={'#' + ids[i]} onClick={go(ids[i])}>{n}</a>)}</nav>
-        <a className="btn sm" href="#contato" onClick={go('contato')}>Contato</a>
+        <a className="btn sm" href="#contato" onClick={go('contato')}>{b.navCta}</a>
+        <div className="lang" role="group" aria-label="Language">{['pt', 'en'].map((x) => <button key={x} className={lang === x ? 'on' : ''} onClick={() => setLang(x)}>{x.toUpperCase()}</button>)}</div>
       </div></header>
 
       <section className="hero">
@@ -30,7 +32,7 @@ export default function Landing() {
       <div className="strip">{projects.items.slice(0, 4).map((p, i) => <Reveal key={i} delay={i * 80}><img src={p.image} alt={p.name} /></Reveal>)}</div>
 
       <section className="hello">
-        <span className="serif" style={{ fontSize: 24, color: '#55534c' }}>Olá!</span>
+        <span className="serif" style={{ fontSize: 24, color: '#55534c' }}>{hello.greeting}</span>
         <Reveal as="p">{hello.text}</Reveal>
         <div className="tags">{hello.tags.map((t, i) => <Reveal as="span" key={i} delay={i * 50}>{t}</Reveal>)}</div>
       </section>
@@ -87,7 +89,7 @@ export default function Landing() {
           <p>{contact.text}</p>
           <a className="btn inv" href={b.whatsapp} style={{ padding: '16px 26px' }}>{contact.button}</a>
           <div className="links">{[['Instagram', b.instagram], ['LinkedIn', b.linkedin], ['GitHub', b.github]].filter(([, u]) => u).map(([n, u]) => <a key={n} href={u} target="_blank" rel="noopener">{n}</a>)}</div>
-          <div className="foot"><span>{b.footer}</span><span>{b.city}</span><a href="#top" onClick={(e) => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }) }}>Voltar ao topo ↑</a></div>
+          <div className="foot"><span>{b.footer}</span><span>{b.city}</span><a href="#top" onClick={(e) => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }) }}>{b.backToTop}</a></div>
         </Reveal>
       </section>
     </div>

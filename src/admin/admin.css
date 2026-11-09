@@ -29,3 +29,5 @@
 .login form{background:#fff;padding:32px;border-radius:24px;display:grid;gap:14px;width:min(360px,90vw)}
 .login h1{margin:0;font-size:26px;letter-spacing:-.03em}.err{color:#b42318}.login a{font-size:14px;color:#55534c;text-align:center}
 @media(max-width:760px){.admin{grid-template-columns:1fr}.admin aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap}.admin aside a{margin-top:0}}
+.langtab{display:flex;gap:4px;background:#e6e4dd;border-radius:999px;padding:3px}
+.admin .langtab button{padding:7px 14px;background:transparent}.admin .langtab button.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}

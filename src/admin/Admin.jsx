@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useContent, setContent, resetContent, ADMIN_PW_KEY } from '../store'
+import { useAllContent, setContent, resetContent, ADMIN_PW_KEY } from '../store'
 import './admin.css'
 
 const getPw = () => localStorage.getItem(ADMIN_PW_KEY) || 'admin123'
@@ -64,19 +64,20 @@ function Login({ onOk }) {
 }
 
 export default function Admin() {
-  const c = useContent()
+  const all = useAllContent()
+  const [lang, setLangTab] = useState('pt')
   const [auth, setAuth] = useState(!!sessionStorage.getItem('gp_admin'))
   const [tab, setTab] = useState('hero')
   const [draft, setDraft] = useState(null)
   const [saved, setSaved] = useState(false)
   const fileRef = useRef()
   if (!auth) return <Login onOk={() => setAuth(true)} />
-  const d = draft || c
+  const d = (draft || all)[lang]
   const dirty = !!draft
-  const up = (section, patch) => setDraft({ ...d, [section]: Array.isArray(d[section]) ? patch : { ...d[section], ...patch } })
+  const up = (section, patch) => setDraft({ ...(draft || all), [lang]: { ...d, [section]: Array.isArray(d[section]) ? patch : { ...d[section], ...patch } } })
   const save = () => { setContent(draft); setDraft(null); setSaved(true); setTimeout(() => setSaved(false), 2000) }
-  const exp = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' })); a.download = 'gpreto-conteudo.json'; a.click() }
-  const imp = (f) => { const r = new FileReader(); r.onload = () => { try { setDraft(JSON.parse(r.result)) } catch { alert('JSON inválido') } }; r.readAsText(f) }
+  const exp = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(draft || all, null, 2)], { type: 'application/json' })); a.download = 'gpreto-conteudo.json'; a.click() }
+  const imp = (f) => { const r = new FileReader(); r.onload = () => { try { { const j = JSON.parse(r.result); setDraft(j.hero ? { pt: j, en: all.en } : j) } } catch { alert('JSON inválido') } }; r.readAsText(f) }
   const tabs = { hero: 'Hero', hello: 'Apresentação', services: 'Serviços', projects: 'Projetos', about: 'Sobre', faq: 'FAQ', contact: 'Contato', brand: 'Marca & links', settings: 'Backup & senha' }
 
   const panels = {
@@ -137,6 +138,8 @@ export default function Admin() {
       <Field label="Instagram" value={d.brand.instagram} onChange={(v) => up('brand', { instagram: v })} />
       <Field label="LinkedIn" value={d.brand.linkedin} onChange={(v) => up('brand', { linkedin: v })} />
       <Field label="GitHub" value={d.brand.github} onChange={(v) => up('brand', { github: v })} />
+      <Field label="Botão do menu (Contato)" value={d.brand.navCta} onChange={(v) => up('brand', { navCta: v })} />
+      <Field label="Link 'voltar ao topo'" value={d.brand.backToTop} onChange={(v) => up('brand', { backToTop: v })} />
       <Field label="Cidade (rodapé)" value={d.brand.city} onChange={(v) => up('brand', { city: v })} />
       <Field label="Texto de copyright" value={d.brand.footer} onChange={(v) => up('brand', { footer: v })} /></>,
     settings: <>
@@ -155,7 +158,7 @@ export default function Admin() {
       {Object.entries(tabs).map(([k, v]) => <button key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       <a href="#/" target="_blank">Ver site ↗</a>
       <button onClick={() => { sessionStorage.removeItem('gp_admin'); setAuth(false) }}>Sair</button></aside>
-    <main><div className="bar"><h2>{tabs[tab]}</h2>
+    <main><div className="bar"><h2>{tabs[tab]}</h2><div className="langtab">{['pt', 'en'].map((x) => <button key={x} className={lang === x ? 'on' : ''} onClick={() => setLangTab(x)}>{x === 'pt' ? '🇧🇷 Português' : '🇺🇸 English'}</button>)}</div>
       <span>{saved && <em>✓ Salvo</em>}{dirty && <button onClick={() => setDraft(null)}>Descartar</button>}
         <button className="pri" disabled={!dirty} onClick={save}>Salvar alterações</button></span></div>
       <div className="panel">{panels[tab]}</div></main></div>)
