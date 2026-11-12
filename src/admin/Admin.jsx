@@ -97,7 +97,7 @@ export default function Admin() {
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => data.subscription.unsubscribe()
   }, [])
-  const [tab, setTab] = useState('hero')
+  const [tab, setTab] = useState('services')
   const [draft, setDraft] = useState(null)
   const [saved, setSaved] = useState(false)
   const fileRef = useRef()
@@ -114,37 +114,20 @@ export default function Admin() {
   }
   const exp = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(draft || all, null, 2)], { type: 'application/json' })); a.download = 'gpreto-conteudo.json'; a.click() }
   const imp = (f) => { const r = new FileReader(); r.onload = () => { try { { const j = JSON.parse(r.result); setDraft(j.hero ? { pt: j, en: all.en } : j) } } catch { alert('JSON inválido') } }; r.readAsText(f) }
-  const tabs = { hero: 'Hero', hello: 'Apresentação', services: 'Serviços', projects: 'Projetos', about: 'Sobre', faq: 'FAQ', contact: 'Contato', brand: 'Marca & links', settings: 'Backup & senha' }
+  const tabs = { services: 'Serviços', projects: 'Projetos', about: 'Sobre', brand: 'Contato & links', settings: 'Backup & senha' }
 
   const panels = {
-    hero: <>
-      <Field label="Selo" value={d.hero.badge} onChange={(v) => up('hero', { badge: v })} />
-      <Field label="Título" value={d.hero.title} onChange={(v) => up('hero', { title: v })} />
-      <Field label="Título (trecho em itálico)" value={d.hero.titleItalic} onChange={(v) => up('hero', { titleItalic: v })} />
-      <Field area label="Texto de apoio" value={d.hero.lead} onChange={(v) => up('hero', { lead: v })} />
-      <Field label="Botão principal" value={d.hero.cta1} onChange={(v) => up('hero', { cta1: v })} />
-      <Field label="Botão secundário" value={d.hero.cta2} onChange={(v) => up('hero', { cta2: v })} />
-      <Check label="Animação 3D (Three.js) no hero" value={d.hero.animation3d} onChange={(v) => up('hero', { animation3d: v })} />
-      <StringList label="Itens do menu (Serviços, Projetos, Sobre, FAQ)" list={d.nav} onChange={(v) => up('nav', v)} /></>,
-    hello: <>
-      <Field area label="Texto" value={d.hello.text} onChange={(v) => up('hello', { text: v })} />
-      <StringList label="Tags" list={d.hello.tags} onChange={(v) => up('hello', { tags: v })} /></>,
     services: <>
-      <Field label="Chamada" value={d.services.eyebrow} onChange={(v) => up('services', { eyebrow: v })} />
-      <Field label="Título" value={d.services.title} onChange={(v) => up('services', { title: v })} />
       <Field area label="Texto" value={d.services.lead} onChange={(v) => up('services', { lead: v })} />
       <ObjList items={d.services.items} onChange={(v) => up('services', { items: v })} blank={{ title: '', desc: '', bullets: [] }} title={(i) => i.title}
         render={(i, set) => <><Field label="Título" value={i.title} onChange={(v) => set({ title: v })} /><Field area label="Descrição" value={i.desc} onChange={(v) => set({ desc: v })} /><StringList label="Tópicos" list={i.bullets} onChange={(v) => set({ bullets: v })} /></>} /></>,
     projects: <>
-      <Field label="Chamada" value={d.projects.eyebrow} onChange={(v) => up('projects', { eyebrow: v })} />
-      <Field label="Título" value={d.projects.title} onChange={(v) => up('projects', { title: v })} />
       <Field area label="Texto" value={d.projects.lead} onChange={(v) => up('projects', { lead: v })} />
       <Field label="Texto do botão final" value={d.projects.cta} onChange={(v) => up('projects', { cta: v })} />
-      <p className="hint">Os 4 primeiros projetos também aparecem na faixa de imagens do topo.</p>
+      <p className="hint">Os nomes dos projetos também aparecem na faixa rolando logo abaixo do topo. A categoria define em qual filtro o projeto aparece (Onepage, Institucional, Landing Page, E-commerce).</p>
       <ObjList items={d.projects.items} onChange={(v) => up('projects', { items: v })} blank={{ name: '', cat: '', image: '', link: '' }} title={(i) => i.name}
         render={(i, set) => <><Field label="Nome" value={i.name} onChange={(v) => set({ name: v })} /><Field label="Categoria" value={i.cat} onChange={(v) => set({ cat: v })} /><Field label="Link do site" value={i.link} onChange={(v) => set({ link: v })} /><ImageField label="Imagem" value={i.image} onChange={(v) => set({ image: v })} /></>} /></>,
     about: <>
-      <Field label="Chamada" value={d.about.eyebrow} onChange={(v) => up('about', { eyebrow: v })} />
       <Field label="Nome" value={d.about.name} onChange={(v) => up('about', { name: v })} />
       <Field label="Função / cidade" value={d.about.role} onChange={(v) => up('about', { role: v })} />
       <ImageField label="Foto" value={d.about.photo} onChange={(v) => up('about', { photo: v })} />
@@ -154,30 +137,11 @@ export default function Admin() {
       <ObjList items={d.about.stats} onChange={(v) => up('about', { stats: v })} blank={{ title: '', text: '' }} title={(i) => i.title}
         render={(i, set) => <><Field label="Título" value={i.title} onChange={(v) => set({ title: v })} /><Field label="Texto" value={i.text} onChange={(v) => set({ text: v })} /></>} />
       <StringList label="Habilidades / tecnologias" list={d.about.skills} onChange={(v) => up('about', { skills: v })} /></>,
-    faq: <>
-      <Field label="Chamada" value={d.faq.eyebrow} onChange={(v) => up('faq', { eyebrow: v })} />
-      <Field label="Título" value={d.faq.title} onChange={(v) => up('faq', { title: v })} />
-      <Field label="Cartão escuro: título" value={d.faq.ctaTitle} onChange={(v) => up('faq', { ctaTitle: v })} />
-      <Field label="Cartão escuro: botão" value={d.faq.ctaButton} onChange={(v) => up('faq', { ctaButton: v })} />
-      <ObjList items={d.faq.items} onChange={(v) => up('faq', { items: v })} blank={{ q: '', a: '' }} title={(i) => i.q}
-        render={(i, set) => <><Field label="Pergunta" value={i.q} onChange={(v) => set({ q: v })} /><Field area label="Resposta" value={i.a} onChange={(v) => set({ a: v })} /></>} /></>,
-    contact: <>
-      <Field label="Chamada" value={d.contact.eyebrow} onChange={(v) => up('contact', { eyebrow: v })} />
-      <Field label="Título" value={d.contact.title} onChange={(v) => up('contact', { title: v })} />
-      <Field label="Título (itálico)" value={d.contact.titleItalic} onChange={(v) => up('contact', { titleItalic: v })} />
-      <Field area label="Texto" value={d.contact.text} onChange={(v) => up('contact', { text: v })} />
-      <Field label="Botão" value={d.contact.button} onChange={(v) => up('contact', { button: v })} /></>,
     brand: <>
-      <ImageField label="Logo" value={d.brand.logo} onChange={(v) => up('brand', { logo: v })} />
       <Field label="Link do WhatsApp" value={d.brand.whatsapp} onChange={(v) => up('brand', { whatsapp: v })} />
       <Field label="Telefone exibido" value={d.brand.phone} onChange={(v) => up('brand', { phone: v })} />
       <Field label="Instagram" value={d.brand.instagram} onChange={(v) => up('brand', { instagram: v })} />
-      <Field label="LinkedIn" value={d.brand.linkedin} onChange={(v) => up('brand', { linkedin: v })} />
-      <Field label="GitHub" value={d.brand.github} onChange={(v) => up('brand', { github: v })} />
-      <Field label="Botão do menu (Contato)" value={d.brand.navCta} onChange={(v) => up('brand', { navCta: v })} />
-      <Field label="Link 'voltar ao topo'" value={d.brand.backToTop} onChange={(v) => up('brand', { backToTop: v })} />
-      <Field label="Cidade (rodapé)" value={d.brand.city} onChange={(v) => up('brand', { city: v })} />
-      <Field label="Texto de copyright" value={d.brand.footer} onChange={(v) => up('brand', { footer: v })} /></>,
+      <Field label="LinkedIn" value={d.brand.linkedin} onChange={(v) => up('brand', { linkedin: v })} /></>,
     settings: <>
       <p className="hint">O conteúdo é salvo no Supabase e aparece para todos os visitantes. O backup em JSON é opcional.</p>
       <div className="row"><button className="pri" onClick={exp}>Exportar JSON</button>
@@ -190,7 +154,7 @@ export default function Admin() {
   }
 
   return (<div className="admin">
-    <aside><b>GPRETO · Admin</b>
+    <aside><b>GPRETO<sup>®</sup><small>Admin</small></b>
       {Object.entries(tabs).map(([k, v]) => <button key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       <a href="#/" target="_blank">Ver site ↗</a>
       <button onClick={() => supabase.auth.signOut()}>Sair ({email})</button></aside>
