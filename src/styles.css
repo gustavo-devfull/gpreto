@@ -1,5 +1,5 @@
 /* base global — o layout da landing fica em landing.css (escopo .g5) */
 *{box-sizing:border-box}
-body{margin:0;background:#f3f2ee;color:#151513;font-family:'Archivo',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:#1D3557;color:#151513;font-family:'Archivo',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:#151513;text-decoration:none}
 img{max-width:100%}

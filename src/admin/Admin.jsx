@@ -154,12 +154,12 @@ export default function Admin() {
   }
 
   return (<div className="admin">
-    <aside><b>GPRETO<sup>®</sup><small>Admin</small></b>
+    <aside><b>GPRETO<sup>®</sup><small>Admin</small></b><i className="ind" />
       {Object.entries(tabs).map(([k, v]) => <button key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       <a href="#/" target="_blank">Ver site ↗</a>
       <button onClick={() => supabase.auth.signOut()}>Sair ({email})</button></aside>
     <main><div className="bar"><h2>{tabs[tab]}</h2><div className="langtab">{['pt', 'en'].map((x) => <button key={x} className={lang === x ? 'on' : ''} onClick={() => setLangTab(x)}>{x === 'pt' ? '🇧🇷 Português' : '🇺🇸 English'}</button>)}</div>
       <span>{saved && <em>✓ Salvo</em>}{dirty && <button onClick={() => setDraft(null)}>Descartar</button>}
         <button className="pri" disabled={!dirty} onClick={save}>Salvar alterações</button></span></div>
-      <div className="panel">{panels[tab]}</div></main></div>)
+      <div className="panel" key={tab + lang}>{panels[tab]}</div></main></div>)
 }
