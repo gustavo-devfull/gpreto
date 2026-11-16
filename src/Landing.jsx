@@ -161,7 +161,7 @@ export default function Landing() {
                 <div><span className="n">(0{i + 1})</span><h3>{s.title}</h3></div>
                 <div><p>{s.desc}</p><div className="tg">{s.bullets.map((x, j) => <span key={j}>{x.replace(/\.$/, '')}</span>)}</div></div>
               </div>
-              <div className="im"><div data-par><img src={serviceImg[i % 3]} alt={s.title} loading="lazy" /></div></div>
+              <div className="im"><div data-par><img src={s.image || serviceImg[i % 3]} alt={s.title} loading="lazy" /></div></div>
             </article>
           ))}
         </div>

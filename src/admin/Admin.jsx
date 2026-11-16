@@ -137,8 +137,8 @@ export default function Admin() {
       <Field label="Título do formulário" value={d.contact.formTitle} onChange={(v) => up('contact', { formTitle: v })} /></>,
     services: <>
       <Field area label="Texto" value={d.services.lead} onChange={(v) => up('services', { lead: v })} />
-      <ObjList items={d.services.items} onChange={(v) => up('services', { items: v })} blank={{ title: '', desc: '', bullets: [] }} title={(i) => i.title}
-        render={(i, set) => <><Field label="Título" value={i.title} onChange={(v) => set({ title: v })} /><Field area label="Descrição" value={i.desc} onChange={(v) => set({ desc: v })} /><StringList label="Tópicos" list={i.bullets} onChange={(v) => set({ bullets: v })} /></>} /></>,
+      <ObjList items={d.services.items} onChange={(v) => up('services', { items: v })} blank={{ title: '', desc: '', bullets: [], image: '' }} title={(i) => i.title}
+        render={(i, set) => <><Field label="Título" value={i.title} onChange={(v) => set({ title: v })} /><Field area label="Descrição" value={i.desc} onChange={(v) => set({ desc: v })} /><StringList label="Tópicos" list={i.bullets} onChange={(v) => set({ bullets: v })} /><ImageField label="Imagem (vazio = imagem padrão)" value={i.image} onChange={(v) => set({ image: v })} /></>} /></>,
     projects: <>
       <Field area label="Texto" value={d.projects.lead} onChange={(v) => up('projects', { lead: v })} />
       <Field label="Texto do botão final" value={d.projects.cta} onChange={(v) => up('projects', { cta: v })} />
