@@ -12,7 +12,6 @@ const two = (s = '') => {
   for (let j = s.indexOf(' '); j >= 0; j = s.indexOf(' ', j + 1)) if (i < 0 || Math.abs(j - s.length / 2) < Math.abs(i - s.length / 2)) i = j
   return i < 0 ? [s, ''] : [s.slice(0, i), s.slice(i + 1)]
 }
-const FILTERS = [/./, /one-?page/i, /institucional|corporate/i, /landing/i, /e-?commerce/i]
 const serviceImg = ['./img/andreza.webp', './img/asksuite.webp', './img/mori.webp']
 const cardTone = ['cream', 'red', 'aqua']
 
@@ -20,7 +19,7 @@ const cardTone = ['cream', 'red', 'aqua']
 const L = {
   pt: {
     loading: 'Carregando', nav: [['sobre', 'Sobre'], ['servicos', 'Serviços'], ['portfolio', 'Projetos'], ['contato', 'Contato']],
-    serv: 'Serviços', techs: 'Tecnologias dominadas', proj: 'Projetos', visit: 'Visitar', filters: ['Todos', 'Onepage', 'Institucional', 'Landing Page', 'E-commerce'],
+    serv: 'Serviços', techs: 'Tecnologias dominadas', proj: 'Projetos', visit: 'Visitar',
     phone: 'Telefone / WhatsApp', mail: 'E-mail', insta: 'Instagram', follow: 'Seguir ↗',
     name: 'Nome completo', email: 'E-mail', subject: 'Assunto', msg: 'Mensagem', pName: 'Ex: João da Silva', pEmail: 'Ex: joao@email.com', pSubject: 'Ex: Orçamento para Landing Page', pMsg: 'Descreva seu projeto ou dúvida...',
     submit: 'Enviar agora →', sent: 'Abrimos seu app de e-mail com a mensagem pronta. Obrigado!', dflt: 'Contato pelo site', top: 'Voltar ao topo ↑',
@@ -28,7 +27,7 @@ const L = {
   },
   en: {
     loading: 'Loading', nav: [['sobre', 'About'], ['servicos', 'Services'], ['portfolio', 'Projects'], ['contato', 'Contact']],
-    serv: 'Services', techs: 'Technologies', proj: 'Projects', visit: 'Visit', filters: ['All', 'One-page', 'Corporate', 'Landing page', 'E-commerce'],
+    serv: 'Services', techs: 'Technologies', proj: 'Projects', visit: 'Visit',
     phone: 'Phone / WhatsApp', mail: 'E-mail', insta: 'Instagram', follow: 'Follow ↗',
     name: 'Full name', email: 'E-mail', subject: 'Subject', msg: 'Message', pName: 'E.g. John Smith', pEmail: 'E.g. john@email.com', pSubject: 'E.g. Quote for a landing page', pMsg: 'Describe your project or question...',
     submit: 'Send now →', sent: 'We opened your e-mail app with the message ready. Thank you!', dflt: 'Website contact', top: 'Back to top ↑',
@@ -67,7 +66,6 @@ export default function Landing() {
   const root = useRef(null)
   const reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
   const [ready, setReady] = useState(reduce)
-  const [filter, setFilter] = useState(0)
   const [form, setForm] = useState({ nome: '', email: '', assunto: '', mensagem: '' })
   const [sent, setSent] = useState(false)
   useFx(root)
@@ -78,7 +76,7 @@ export default function Landing() {
     window.open(`mailto:${email}?subject=${encodeURIComponent(form.assunto || t.dflt)}&body=${encodeURIComponent(body)}`, '_blank')
     setSent(true)
   }
-  const list = projects.items.filter((p) => FILTERS[filter].test(p.cat))
+  const list = projects.items
   const names = projects.items.map((p) => p.name)
   const techs = about.skills
   const stat0 = about.stats[0]?.title || '20+'
@@ -178,7 +176,7 @@ export default function Landing() {
         <div className="in">
           <div className="sh">
             <h2 className="gp-h2"><span className="ln"><span data-rv="0" data-y="105%">{t.proj}<sup>({String(list.length).padStart(2, '0')})</sup></span></span></h2>
-            <div data-rv="100" className="flt">{t.filters.map((f, i) => <button key={f} className={filter === i ? 'on' : ''} onClick={() => setFilter(i)}>{f}</button>)}</div>
+            {projects.lead && <p data-rv="100">{projects.lead}</p>}
           </div>
           <div className="rows">
             {list.map((p, k) => (

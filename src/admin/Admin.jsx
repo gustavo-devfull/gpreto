@@ -142,7 +142,7 @@ export default function Admin() {
     projects: <>
       <Field area label="Texto" value={d.projects.lead} onChange={(v) => up('projects', { lead: v })} />
       <Field label="Texto do botão final" value={d.projects.cta} onChange={(v) => up('projects', { cta: v })} />
-      <p className="hint">Os nomes dos projetos também aparecem na faixa rolando logo abaixo do topo. A categoria define em qual filtro o projeto aparece (Onepage, Institucional, Landing Page, E-commerce).</p>
+      <p className="hint">Os nomes dos projetos também aparecem na faixa rolando logo abaixo do topo. A categoria aparece ao lado do nome na lista.</p>
       <ObjList items={d.projects.items} onChange={(v) => up('projects', { items: v })} blank={{ name: '', cat: '', image: '', link: '' }} title={(i) => i.name}
         render={(i, set) => <><Field label="Nome" value={i.name} onChange={(v) => set({ name: v })} /><Field label="Categoria" value={i.cat} onChange={(v) => set({ cat: v })} /><Field label="Link do site" value={i.link} onChange={(v) => set({ link: v })} /><ImageField label="Imagem" value={i.image} onChange={(v) => set({ image: v })} /></>} /></>,
     about: <>
