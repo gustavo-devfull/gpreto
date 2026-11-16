@@ -5,17 +5,13 @@ export const defaultContentPt = {
     logo: './img/logo-gpreto.png', whatsapp: W, phone: '+55 16 99752-0110',
     instagram: 'https://instagram.com/gpreto.site', linkedin: 'https://www.linkedin.com/in/gutosantos/',
     github: 'https://github.com/gustavo-devfull', city: 'Araraquara — SP', footer: '© 2026 GPRETO | Soluções Digitais', navCta: 'Contato', backToTop: 'Voltar ao topo ↑',
+    rights: '© 2026 GPRETO Design e Soluções Digitais. Todos os direitos reservados.', credit: 'Desenvolvido com ♥ pela GPRETO.',
   },
-  nav: ['Serviços', 'Projetos', 'Sobre', 'FAQ'],
   hero: {
-    badge: 'Agenda aberta — novos projetos', title: 'Design e soluções digitais', titleItalic: 'que fazem sua marca crescer',
-    lead: 'Criação de sites e plataformas digitais para empresas e profissionais liberais. Mais de 20 anos de experiência, com qualidade e rapidez.',
-    cta1: 'Solicitar orçamento', cta2: 'Ver projetos', animation3d: true,
-  },
-  hello: {
-    greeting: 'Olá!',
-    text: 'Transformamos suas ideias em realidade digital — com design bonito, funcional e feito para atrair e reter clientes.',
-    tags: ['Landing pages', 'Sites institucionais', 'E-commerce', 'Design responsivo', 'SEO', 'Suporte técnico'],
+    tag: 'Design e soluções digitais', where: 'atendemos todo o Brasil', years: '20+ anos no mercado digital',
+    line1: 'Sites que', line2: 'fazem', line3: 'marcas', italic: 'crescer.', image: '',
+    intro: 'Criação de sites e plataformas digitais para empresas e profissionais liberais — com qualidade, rapidez e design que converte.',
+    button: 'Ver projetos ↓',
   },
   services: {
     eyebrow: 'Serviços', title: 'Nossos serviços',
@@ -51,16 +47,13 @@ export const defaultContentPt = {
     p2: 'Oferecemos um site moderno e profissional que reflete sua marca, além de otimização para SEO, suporte técnico e outros serviços.',
     stats: [{ title: '20+ anos', text: 'No mercado digital, entregando resultados.' }, { title: 'Qualidade e rapidez', text: 'Soluções eficientes com foco no cliente.' }],
     skills: ['WordPress', 'Elementor', 'Crocoblock', 'JavaScript', 'React', 'Bootstrap', 'Tailwind CSS', 'HTML & CSS', 'jQuery', 'Figma', 'Adobe XD', 'Photoshop'],
+    yearsLabel: 'Anos de experiência', yearsText: 'No mercado digital, entregando resultados com qualidade e rapidez.',
+    pills: ['Pontualidade', 'Criatividade', 'Suporte técnico'], founder: 'Conheça o fundador',
+    education: [{ course: 'Análise e Desenvolvimento de Sistemas', place: 'Senac/SP, 2024' }, { course: 'Fotografia', place: 'Belas Artes/SP, 2016' }, { course: 'Processamento de Dados', place: 'Escola de Engenharia Eletromecânica da Bahia, 1993' }],
   },
-  faq: {
-    eyebrow: 'FAQ', title: 'Perguntas frequentes', ctaTitle: 'Ainda tem dúvidas? Fale conosco agora.', ctaButton: 'Chamar no WhatsApp',
-    items: [
-      { q: 'Quais serviços vocês oferecem?', a: 'Criação de landing pages, sites institucionais e e-commerces, com design responsivo, otimização para SEO e suporte técnico.' },
-      { q: 'Quanto custa um projeto?', a: 'Cada projeto tem um orçamento sob medida, de acordo com o escopo. Chame no WhatsApp e envio uma proposta sem compromisso.' },
-      { q: 'Qual o prazo de entrega?', a: 'Depende do tamanho do projeto. Antes de começar, combinamos um cronograma claro com todas as etapas.' },
-      { q: 'Atende clientes de outras cidades?', a: 'Sim. Todo o processo pode ser feito online, para qualquer cidade do Brasil.' },
-      { q: 'O site fica pronto para celular?', a: 'Sim. Todos os sites são responsivos e funcionam bem em celular, tablet e computador.' },
-    ],
+  contact: {
+    tag: 'Fale com a GPRETO', heading: 'Vamos criar', headingItalic: 'juntos?', whatsappBtn: 'Chamar no WhatsApp ↗',
+    intro: 'Tem um projeto em mente ou precisa de soluções digitais? Estamos prontos para ouvir você e transformar suas ideias em realidade.',
+    email: 'contato@gpreto.site', formTitle: 'Envie sua mensagem',
   },
-  contact: { eyebrow: 'Agenda aberta', title: 'Vamos', titleItalic: 'conversar', text: 'Tem um projeto em mente? Conte sua ideia e receba um orçamento sem compromisso.', button: 'Chamar no WhatsApp' },
 }

@@ -4,17 +4,13 @@ export const defaultContentEn = {
     logo: './img/logo-gpreto.png', whatsapp: 'https://wa.me/5516997520110', phone: '+55 16 99752-0110',
     instagram: 'https://instagram.com/gpreto.site', linkedin: 'https://www.linkedin.com/in/gutosantos/',
     github: 'https://github.com/gustavo-devfull', city: 'Araraquara — SP, Brazil', footer: '© 2026 GPRETO | Digital Solutions', navCta: 'Contact', backToTop: 'Back to top ↑',
+    rights: '© 2026 GPRETO Design and Digital Solutions. All rights reserved.', credit: 'Built with ♥ by GPRETO.',
   },
-  nav: ['Services', 'Projects', 'About', 'FAQ'],
   hero: {
-    badge: 'Open for new projects', title: 'Design and digital solutions', titleItalic: 'that make your brand grow',
-    lead: 'Websites and digital platforms for companies and professionals. Over 20 years of experience, delivered with quality and speed.',
-    cta1: 'Request a quote', cta2: 'See projects', animation3d: true,
-  },
-  hello: {
-    greeting: 'Hello!',
-    text: 'We turn your ideas into digital reality — with beautiful, functional design built to attract and retain customers.',
-    tags: ['Landing pages', 'Corporate websites', 'E-commerce', 'Responsive design', 'SEO', 'Technical support'],
+    tag: 'Design and digital solutions', where: 'serving all of Brazil', years: '20+ years in the digital market',
+    line1: 'Sites that', line2: 'make', line3: 'brands', italic: 'grow.', image: '',
+    intro: 'Websites and digital platforms for companies and independent professionals — with quality, speed and design that converts.',
+    button: 'See projects ↓',
   },
   services: {
     eyebrow: 'Services', title: 'Our services',
@@ -50,16 +46,13 @@ export const defaultContentEn = {
     p2: 'We deliver a modern, professional website that reflects your brand, plus SEO optimization, technical support and other services.',
     stats: [{ title: '20+ years', text: 'In the digital market, delivering results.' }, { title: 'Quality and speed', text: 'Efficient solutions focused on the client.' }],
     skills: ['WordPress', 'Elementor', 'Crocoblock', 'JavaScript', 'React', 'Bootstrap', 'Tailwind CSS', 'HTML & CSS', 'jQuery', 'Figma', 'Adobe XD', 'Photoshop'],
+    yearsLabel: 'Years of experience', yearsText: 'In the digital market, delivering results with quality and speed.',
+    pills: ['Punctuality', 'Creativity', 'Technical support'], founder: 'Meet the founder',
+    education: [{ course: 'Systems Analysis and Development', place: 'Senac/SP, 2024' }, { course: 'Photography', place: 'Belas Artes/SP, 2016' }, { course: 'Data Processing', place: 'Escola de Engenharia Eletromecânica da Bahia, 1993' }],
   },
-  faq: {
-    eyebrow: 'FAQ', title: 'Frequently asked questions', ctaTitle: 'Still have questions? Talk to us now.', ctaButton: 'Chat on WhatsApp',
-    items: [
-      { q: 'What services do you offer?', a: 'Landing pages, corporate websites and e-commerce stores, with responsive design, SEO optimization and technical support.' },
-      { q: 'How much does a project cost?', a: 'Every project is quoted according to its scope. Message us on WhatsApp and we will send a no-obligation proposal.' },
-      { q: 'What is the delivery time?', a: 'It depends on the size of the project. Before we start, we agree on a clear schedule with every stage.' },
-      { q: 'Do you work with clients in other cities?', a: 'Yes. The whole process can be done online, for any city in Brazil and abroad.' },
-      { q: 'Will the site work on mobile?', a: 'Yes. All sites are responsive and work well on phones, tablets and computers.' },
-    ],
+  contact: {
+    tag: 'Talk to GPRETO', heading: "Let's build", headingItalic: 'together?', whatsappBtn: 'Chat on WhatsApp ↗',
+    intro: 'Have a project in mind or need digital solutions? We are ready to listen and turn your ideas into reality.',
+    email: 'contato@gpreto.site', formTitle: 'Send a message',
   },
-  contact: { eyebrow: 'Open for new projects', title: 'Let’s', titleItalic: 'talk', text: 'Have a project in mind? Tell us your idea and get a no-obligation quote.', button: 'Chat on WhatsApp' },
 }

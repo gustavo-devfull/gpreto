@@ -97,7 +97,7 @@ export default function Admin() {
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => data.subscription.unsubscribe()
   }, [])
-  const [tab, setTab] = useState('services')
+  const [tab, setTab] = useState('hero')
   const [draft, setDraft] = useState(null)
   const [saved, setSaved] = useState(false)
   const fileRef = useRef()
@@ -114,9 +114,27 @@ export default function Admin() {
   }
   const exp = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(draft || all, null, 2)], { type: 'application/json' })); a.download = 'gpreto-conteudo.json'; a.click() }
   const imp = (f) => { const r = new FileReader(); r.onload = () => { try { { const j = JSON.parse(r.result); setDraft(j.hero ? { pt: j, en: all.en } : j) } } catch { alert('JSON inválido') } }; r.readAsText(f) }
-  const tabs = { services: 'Serviços', projects: 'Projetos', about: 'Sobre', brand: 'Contato & links', settings: 'Backup & senha' }
+  const tabs = { hero: 'Início (topo)', services: 'Serviços', projects: 'Projetos', about: 'Sobre', contact: 'Contato', brand: 'Links & rodapé', settings: 'Backup & senha' }
 
   const panels = {
+    hero: <>
+      <p className="hint">Título grande do topo do site, dividido em 3 linhas. A palavra em itálico aparece em vermelho no fim da 3ª linha.</p>
+      <div className="row2"><Field label="Linha 1" value={d.hero.line1} onChange={(v) => up('hero', { line1: v })} /><Field label="Linha 2 (ao lado da imagem)" value={d.hero.line2} onChange={(v) => up('hero', { line2: v })} /></div>
+      <div className="row2"><Field label="Linha 3" value={d.hero.line3} onChange={(v) => up('hero', { line3: v })} /><Field label="Palavra em itálico" value={d.hero.italic} onChange={(v) => up('hero', { italic: v })} /></div>
+      <Field area label="Texto de apresentação" value={d.hero.intro} onChange={(v) => up('hero', { intro: v })} />
+      <Field label="Texto do botão redondo" value={d.hero.button} onChange={(v) => up('hero', { button: v })} />
+      <h4>Linha de informações</h4>
+      <Field label="Chamada (01)" value={d.hero.tag} onChange={(v) => up('hero', { tag: v })} />
+      <div className="row2"><Field label="Cidade" value={d.brand.city} onChange={(v) => up('brand', { city: v })} /><Field label="Complemento da cidade" value={d.hero.where} onChange={(v) => up('hero', { where: v })} /></div>
+      <Field label="Experiência" value={d.hero.years} onChange={(v) => up('hero', { years: v })} />
+      <ImageField label="Imagem da pílula (vazio = imagem do 4º projeto)" value={d.hero.image} onChange={(v) => up('hero', { image: v })} /></>,
+    contact: <>
+      <Field label="Chamada (05)" value={d.contact.tag} onChange={(v) => up('contact', { tag: v })} />
+      <div className="row2"><Field label="Título" value={d.contact.heading} onChange={(v) => up('contact', { heading: v })} /><Field label="Título em itálico" value={d.contact.headingItalic} onChange={(v) => up('contact', { headingItalic: v })} /></div>
+      <Field area label="Texto" value={d.contact.intro} onChange={(v) => up('contact', { intro: v })} />
+      <Field label="Botão do WhatsApp" value={d.contact.whatsappBtn} onChange={(v) => up('contact', { whatsappBtn: v })} />
+      <Field label="E-mail de contato (recebe o formulário)" value={d.contact.email} onChange={(v) => up('contact', { email: v })} />
+      <Field label="Título do formulário" value={d.contact.formTitle} onChange={(v) => up('contact', { formTitle: v })} /></>,
     services: <>
       <Field area label="Texto" value={d.services.lead} onChange={(v) => up('services', { lead: v })} />
       <ObjList items={d.services.items} onChange={(v) => up('services', { items: v })} blank={{ title: '', desc: '', bullets: [] }} title={(i) => i.title}
@@ -128,6 +146,7 @@ export default function Admin() {
       <ObjList items={d.projects.items} onChange={(v) => up('projects', { items: v })} blank={{ name: '', cat: '', image: '', link: '' }} title={(i) => i.name}
         render={(i, set) => <><Field label="Nome" value={i.name} onChange={(v) => set({ name: v })} /><Field label="Categoria" value={i.cat} onChange={(v) => set({ cat: v })} /><Field label="Link do site" value={i.link} onChange={(v) => set({ link: v })} /><ImageField label="Imagem" value={i.image} onChange={(v) => set({ image: v })} /></>} /></>,
     about: <>
+      <Field label="Chamada (02)" value={d.about.eyebrow} onChange={(v) => up('about', { eyebrow: v })} />
       <Field label="Nome" value={d.about.name} onChange={(v) => up('about', { name: v })} />
       <Field label="Função / cidade" value={d.about.role} onChange={(v) => up('about', { role: v })} />
       <ImageField label="Foto" value={d.about.photo} onChange={(v) => up('about', { photo: v })} />
@@ -136,12 +155,24 @@ export default function Admin() {
       <h4>Destaques</h4>
       <ObjList items={d.about.stats} onChange={(v) => up('about', { stats: v })} blank={{ title: '', text: '' }} title={(i) => i.title}
         render={(i, set) => <><Field label="Título" value={i.title} onChange={(v) => set({ title: v })} /><Field label="Texto" value={i.text} onChange={(v) => set({ text: v })} /></>} />
-      <StringList label="Habilidades / tecnologias" list={d.about.skills} onChange={(v) => up('about', { skills: v })} /></>,
+      <h4>Card de experiência</h4>
+      <Field label="Rótulo" value={d.about.yearsLabel} onChange={(v) => up('about', { yearsLabel: v })} />
+      <Field label="Texto" value={d.about.yearsText} onChange={(v) => up('about', { yearsText: v })} />
+      <p className="hint">O número grande vem do título do 1º destaque (ex.: “20+ anos” → 20+).</p>
+      <StringList label="Diferenciais (etiquetas)" list={d.about.pills} onChange={(v) => up('about', { pills: v })} />
+      <h4>Card do fundador</h4>
+      <Field label="Chamada" value={d.about.founder} onChange={(v) => up('about', { founder: v })} />
+      <ObjList items={d.about.education} onChange={(v) => up('about', { education: v })} blank={{ course: '', place: '' }} title={(i) => i.course}
+        render={(i, set) => <><Field label="Curso" value={i.course} onChange={(v) => set({ course: v })} /><Field label="Instituição / ano" value={i.place} onChange={(v) => set({ place: v })} /></>} />
+      <StringList label="Tecnologias (faixa rolando)" list={d.about.skills} onChange={(v) => up('about', { skills: v })} /></>,
     brand: <>
       <Field label="Link do WhatsApp" value={d.brand.whatsapp} onChange={(v) => up('brand', { whatsapp: v })} />
       <Field label="Telefone exibido" value={d.brand.phone} onChange={(v) => up('brand', { phone: v })} />
       <Field label="Instagram" value={d.brand.instagram} onChange={(v) => up('brand', { instagram: v })} />
-      <Field label="LinkedIn" value={d.brand.linkedin} onChange={(v) => up('brand', { linkedin: v })} /></>,
+      <Field label="LinkedIn" value={d.brand.linkedin} onChange={(v) => up('brand', { linkedin: v })} />
+      <h4>Rodapé</h4>
+      <Field label="Direitos autorais" value={d.brand.rights} onChange={(v) => up('brand', { rights: v })} />
+      <Field label="Crédito" value={d.brand.credit} onChange={(v) => up('brand', { credit: v })} /></>,
     settings: <>
       <p className="hint">O conteúdo é salvo no Supabase e aparece para todos os visitantes. O backup em JSON é opcional.</p>
       <div className="row"><button className="pri" onClick={exp}>Exportar JSON</button>
