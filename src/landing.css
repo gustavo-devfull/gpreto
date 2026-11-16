@@ -32,7 +32,8 @@ html{scroll-behavior:smooth}
 .gp-hero h1{margin:0;font-weight:800;font-stretch:78%;font-size:clamp(58px,12vw,196px);line-height:.86;letter-spacing:-.035em;text-transform:uppercase}
 .gp-hero h1 i{color:var(--red);font-weight:300;font-style:italic}
 .gp-hero .flex{display:flex!important;align-items:center;gap:.18em}
-.gp-hero .pill{position:relative;display:inline-block;width:2.1em;height:.74em;border-radius:999px;overflow:hidden;background:var(--mid);flex:none}.gp-hero .pill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.gp-hero .pill{position:relative;display:inline-block;width:2.1em;height:.74em;border-radius:999px;overflow:hidden;background:transparent;flex:none}.gp-hero .pill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.gp-hero .pill.own{border-radius:0;overflow:visible}.gp-hero .pill.own img{object-fit:contain;object-position:center}
 .gp-hero .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 .gp-hero .foot p{margin:0;font-size:clamp(16px,1.4vw,20px);line-height:1.5;max-width:440px;color:#d6e6ec;text-wrap:pretty}
 .gp .round{width:120px;height:120px;border-radius:50%;border:1px solid #3d5a80;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;line-height:1.25;transition:transform .4s var(--ease),background .3s,color .3s}.gp .round:hover{background:var(--red);border-color:var(--red)}

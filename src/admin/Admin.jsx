@@ -127,7 +127,7 @@ export default function Admin() {
       <Field label="Chamada (01)" value={d.hero.tag} onChange={(v) => up('hero', { tag: v })} />
       <div className="row2"><Field label="Cidade" value={d.brand.city} onChange={(v) => up('brand', { city: v })} /><Field label="Complemento da cidade" value={d.hero.where} onChange={(v) => up('hero', { where: v })} /></div>
       <Field label="Experiência" value={d.hero.years} onChange={(v) => up('hero', { years: v })} />
-      <ImageField label="Imagem da pílula (vazio = imagem do 4º projeto)" value={d.hero.image} onChange={(v) => up('hero', { image: v })} /></>,
+      <ImageField label="Imagem da pílula — PNG com fundo transparente fica sem recorte (vazio = imagem do 4º projeto)" value={d.hero.image} onChange={(v) => up('hero', { image: v })} /></>,
     contact: <>
       <Field label="Chamada (05)" value={d.contact.tag} onChange={(v) => up('contact', { tag: v })} />
       <div className="row2"><Field label="Título" value={d.contact.heading} onChange={(v) => up('contact', { heading: v })} /><Field label="Título em itálico" value={d.contact.headingItalic} onChange={(v) => up('contact', { headingItalic: v })} /></div>

@@ -107,7 +107,7 @@ export default function Landing() {
         </div>
         <h1>
           <span className="ln"><span {...line(0)}>{h.line1}</span></span>
-          <span className="ln"><span {...line(1)} className="flex"><span className="pill">{heroImg && <img src={heroImg} alt="" />}</span>{h.line2}</span></span>
+          <span className="ln"><span {...line(1)} className="flex"><span className={'pill' + (h.image ? ' own' : '')}>{heroImg && <img src={heroImg} alt="" />}</span>{h.line2}</span></span>
           <span className="ln"><span {...line(2)}>{h.line3} <i>{h.italic}</i></span></span>
         </h1>
         <div className="foot">
